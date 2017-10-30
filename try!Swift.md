@@ -112,6 +112,35 @@ So chill ❄
 
 ---
 
+^ Before covering these examples, I'll go over some bits on Networking that'll help you understand some of the stuff I'll be covering
+
+# Networking
+
+---
+
+Rx ➡ streams of values over time.
+Sockets ➡ streams of data packets over time on a wire
+➡ Rx ❤️ Sockets
+
+^ Thus, Rx translates really well for things like websockets, cos websockets are packets over a wire over time.  We’ve even written our own wrappers around existing websocket clients for our app, and things like disconnections, event subscriptions etc. are handled _really_ well. (link to repo)
+
+
+---
+
+## What about HTTP requests?
+
+![inline](gps.png)
+
+^ You know, where you make a request and you get a response. And there’s just one response. Not very stream-ey, is it? Is Rx still useful for them?
+
+^ Here’s the thing. Requests don’t exist in isolation. Often they’re part of a bigger flow, like refreshing expired tokens, retrying with exponential backoff if you lose an internet connection. Which is why often you don’t deal with a single request by itself in your application flow. We’ll discuss this stuff in detail later, but I brought this up early because there’s this really cool function that has some interesting use cases in Rx. It’s called flatMapLatest
+
+---
+
+# `flatMapLatest()`
+
+---
+
 # Notification Preferences
 
 ^ We shipped notifications with our app in 2.0.0, and we needed to have preferences so the user can opt-in/out of certain notification types
