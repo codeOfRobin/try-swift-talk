@@ -137,7 +137,26 @@ Sockets ➡ streams of data packets over time on a wire
 
 ---
 
-# `flatMapLatest()`
+## `flatMapLatest()`
+
+---
+
+![inline](filter.png)
+
+^ Functions like map, filter etc exist in Rx and they do exactly what you expect
+
+---
+
+![inline](map.png)
+
+^ What about flatMap? Well, flatmap takes an Observable of Observables, and “flattens” them. If you’ve worked with the flatmap function on top of optionals or arrays in swift, this probably makes sense to you. Lets do a demo right now to figure this stuff out
+
+---
+
+# Live Demo 🤓 🖥
+
+^ https://rxfiddle.net/
+^ Demo snippets in demo.md
 
 ---
 
@@ -292,18 +311,78 @@ and if we wanted to cancel requests automagically ✨ , all we’d do was
 
 ---
 
-## Background Images
-
-### If you put text on top of an image, the image is _**filtered**_ so the text is always readable. 
+## Networking(Again!)
 
 ---
 
-# Isn’t that **great?**
+Average API Client (with Foundation)
 
-![](http://deckset-assets.s3-website-us-east-1.amazonaws.com/colnago2.jpg)
+![inline](avg-network-client.png)
 
 ---
 
-# You can also turn the filter off.
+Average API Client (with Alamofire)
 
-![original](http://deckset-assets.s3-website-us-east-1.amazonaws.com/colnago2.jpg)
+![inline](alamofire-networking-client.png)
+
+---
+
+# Things I want in my networking client
+
+1. Testable
+2. Should do exactly what it says. No 🐒 patching.
+
+^ There’s 2 things I really care about with my API Client. 
+^1. It should be testable
+^2. Should do exactly what it says. I’m dead against the idea of a client refreshing tokens and doing things “behind the scenes” by itself without telling the application. This is useful because your client can be used in contexts other than your app, in say a script or on the server!
+
+---
+
+![inline](alamofire-retrial.png)
+
+^ Alamofire has lots of features (which is why we all love it). For example, it has its own networking retrial implementation
+
+---
+
+Alamofire Features 💯
+Alamofire Testability 😞👎
+
+^ Alamofire OTOH is _really_ hard to test (you have to resort to runtime trickery) and solves 2 using it’s own weird constructs around request adapters and request retriers, effectively moving your solution to a level in the stack below your API client, which is 😒
+
+---
+
+![inline](Rx-retrial.png)
+
+^ What about Rx? Well, we can sort of get the best of both worlds (with the first example using NSURLSession). I’m probably running a little short of time here, but let’s go quickly over the operator. It’s called `retry` and has a couple of variations. The most important one is called `retryWhen`
+
+^ this entire handler can handle invalid tokens (1 in the photo), bad connections(2) (and use reachability to ✨magically retry a request if the connection is bad) and ALSO retry requests otherwise with an exponential backoff 😎. All without being locked into alamofire.
+
+---
+
+![inline](Networking.png)
+
+^ I’ve been personally experimenting with this library called Networking(which is a very thin convenience wrapper around `URLSession` and Rx.
+
+---
+
+But I don't wanna rewrite 😢
+
+---
+
+![inline](rx-refactor.png)
+
+---
+
+## What about Management 👩‍💼👨‍💼
+
+---
+
+Make the case for it!!
+
+^ Last time we did a major change (moving to swift), you spent weeks migrating code between versions. Yesterday you suggested writing server side swift. Why should I trust you?
+
+^ Often when dealing with a new paradigm, you’ll get pushback from senior engineers. And while it’s really justified ( uses MVC, why go against the current? Didn’t you _just_ switch languages a year ago), I personally think it’s worth the future costs to use Rx in production apps right now. It remains a fact that  doesn’t exist in a vacuum, and looks at the community for inspiration. Who would’ve thought 4 years ago that they’d make a language with `map`, `reduce` and `filter` as first class citizens? IIRC Apple also has used ReactiveCocoa in one of their demo apps (it’s the thing that runs on macs in the demo mode). I genuinely believe that reactive programming has a bright future in the  ecosystem
+
+---
+
+![autoplay loop](peanuts.mp4)
