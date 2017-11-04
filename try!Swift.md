@@ -1,5 +1,7 @@
 autoscale: true
 theme: Poster,1
+slidenumbers: true
+
 # Refactoring your app in Rx
 
 ---
@@ -13,31 +15,12 @@ theme: Poster,1
 # 👏👏👏
 
 ---
+[.build-lists: true]
 
-Show of hands ✋
+# Show of hands ✋
 
 1. How many people here’ve heard of Functional Reactive Programming?
-2. _How many people here’ve heard of Reactive Swift/RxSwift?_
-3. _How many people here’ve used Reactive Swift/RxSwift?_
-
-^ Don’t forget to announce the percentages for video reasons
-
----
-
-Show of hands ✋
-
-1. _How many people here’ve heard of Functional Reactive Programming?_
 2. How many people here’ve heard of Reactive Swift/RxSwift?
-3. _How many people here’ve used Reactive Swift/RxSwift?_
-
-^ Don’t forget to announce the percentages for video reasons
-
----
-
-Show of hands ✋
-
-1. _How many people here’ve heard of Functional Reactive Programming?_
-2. _How many people here’ve heard of Reactive Swift/RxSwift?_
 3. How many people here’ve used Reactive Swift/RxSwift?
 
 ^ Don’t forget to announce the percentages for video reasons
@@ -93,8 +76,8 @@ I DON'T KNOW RxSwift 😰
 
 ---
 
->Conferences aren’t about learning things, they’re about learning *what* to learn, network, and meet great people.
--- Some guy on Twitter
+>Conferences aren’t about learning things, they’re about learning *what* to learn, about networking, and meeting great people.
+-- Someone on Twitter
 
 ^ No one’s gonna turn into an FP talk after watching 15 slides of maps/flatmaps. No one’s gonna turn into Peter Norvig after a 20 minute ML talk. Sorry Mugunth
 
