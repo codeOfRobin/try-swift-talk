@@ -1,5 +1,6 @@
 autoscale: true
 theme: Poster,1
+slidenumbers: true
 # Refactoring your app in Rx
 
 ---
