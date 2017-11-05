@@ -8,11 +8,13 @@ slidenumbers: true
 
 # Prelude
 
-^ Hello Everyone! It’s an honour and pleasure to speak here. Round of applause for the  speakers and organizers. Great job everyone .
+^ Hello Everyone! It’s an honour and pleasure to speak here. Round of applause for the  speakers and organizers. Great job everyone. <Press next NOW>
 
 ---
 
 # 👏👏👏
+
+^ <clap with everyone>
 
 ---
 [.build-lists: true]
@@ -29,29 +31,37 @@ slidenumbers: true
 
 What this talk is _**NOT**_ about
 
+^ First, lets talk about what this talk is NOT about
+
 ---
 
 - Introduction to RxSwift
+
+<Tap Next>
 
 ---
 
 - ~~Introduction to RxSwift~~
 
+^ It isn’t an introduction to Rx, observables or reactive programming. It’s a complicated topic, you need to rewire your brain quite a bit to think reactively.
+
 ---
 
-^ It isn’t an introduction to Rx, observables or reactive programming. It’s a complicated topic, you need to rewire your brain quite a bit to think reactively. Trust me, I tried.
-
 ![inline](tweet.png)
+
+^ Trust me, I tried.
 
 ---
 
 -  RxSwift with MVVM
 
+^ <Tap Next>
+
 ---
 
 - ~~RxSwift with MVVM~~
 
-^ That’s a whole other ball game, and really hard to explain in a 20 minute session.
+^ That’s a whole other ball game, and there's already been multiple talks about this
 
 ---
 
@@ -63,10 +73,12 @@ Experiences
 
 ---
 
+
+^ Now, a lot of you might be going. 
+
 I DON'T KNOW RxSwift 😰
 
-^ Now, a lot of you might be going
-^ And that's all right
+^And that's all right
 
 ---
 
@@ -99,7 +111,9 @@ Rx ➡ streams of values over time.
 Sockets ➡ streams of data packets over time on a wire
 ➡ Rx ❤️ Sockets
 
-^ Thus, Rx translates really well for things like websockets, cos websockets are packets over a wire over time.  We’ve even written our own wrappers around existing websocket clients for our app, and things like network disconnections, event subscriptions etc. are handled _really_ well. (link to repo)
+^ Let's talk about websockets first
+
+^ Thus, Rx translates really well for things like websockets, cos websockets are packets over a wire over time.  We’ve even written our own wrappers around existing websocket clients for our app, and things like network disconnections, event subscriptions etc. are handled _really_ well. (link to repo that we'll be open sourcing soon 😉)
 
 
 ---
@@ -110,7 +124,7 @@ Sockets ➡ streams of data packets over time on a wire
 
 ^ You know, where you make a request and you get a response. And there’s just one response. Not very stream-ey, is it? Is Rx still useful for them?
 
-^ Here’s the thing. Requests don’t exist in isolation. Often they’re part of a bigger flow, like refreshing expired OAuth tokens, retrying n attempts if your server is down with exponentially  increasing time, waiting for Reachability to tell you that there's a network connection. Which is why often you don’t deal with a single request by itself in your application flow. We’ll discuss this stuff in detail later, but I brought this up early because there’s this really cool function that has some interesting use cases in Rx. It’s called flatMapLatest
+^ Here’s the thing. Requests don’t exist in isolation. Often they’re part of a bigger flow, like refreshing expired OAuth tokens, retrying n attempts if your server is down with exponentially  increasing time, waiting for Reachability to tell you that there actually is a network connection. Which is why often you don’t deal with a single request by itself in your application flow. We’ll discuss this stuff in detail later, but I brought this up early because there’s this really cool function that has some interesting use cases in Rx. It’s called flatMapLatest
 
 ---
 
@@ -126,7 +140,7 @@ Sockets ➡ streams of data packets over time on a wire
 
 ![inline](map.png)
 
-^ What about flatMap? Well, flatmap takes an Observable of Observables, and “flattens” them. If you’ve worked with the flatmap function on top of optionals or arrays in swift, this probably makes sense to you. Lets do a demo right now to figure this stuff out
+^ What about flatMap? Well, flatmap takes an Observable of Observables, and “flattens” them. If you’ve worked with the flatmap function on top of optionals or nested arrays in swift, this probably makes sense to you. Lets do a demo right now to figure this stuff out
 
 ---
 
@@ -156,6 +170,8 @@ Sockets ➡ streams of data packets over time on a wire
 ---
 
 ![inline](prefs_request.png)
+
+^This is what the request looks like. Nothing special. IDs and true/false pairs
 
 ---
 
@@ -190,6 +206,8 @@ Sockets ➡ streams of data packets over time on a wire
 # Imperative approach
 
 - It. Was. Hell.
+
+^ We tried an imperative approach first because our Rx skills were relatively raw
 
 ---
 
@@ -244,11 +262,11 @@ This gets untenable _very_ quickly
 
 ---
 
-and if we wanted to cancel requests automagically ✨ , we have our good old `flatMapLatest`
+and if we wanted to cancel requests automagically ✨ , we have our good old friend `flatMapLatest`
 
 ![inline](throttledRequest.png)
 
-^ So, now so much weird mutable state is now just handled all well for free! and we get a list of preferences for our UI
+^ So, now so much weird mutable state is now just handled all well for free! and we get a list of preferences in the `subscribe` callback that we can use in our UI!
 
 ---
 
@@ -271,7 +289,7 @@ and if we wanted to cancel requests automagically ✨ , we have our good old `fl
 
 ^ Let's do POP like all good swift programmers. And in our actual code, we’d update from a network client. In our tests, we’d just broadcast events and test for the indicator appearing.
 
-^ In fact, there's nothing wrong with this approach. It's perfect, uses swift's tools and is also testable.
+^ In fact, there's nothing wrong with this approach. It's perfect, uses swift's paradigms and is also testable.
 
 ^ One Problem though
 
@@ -279,13 +297,11 @@ and if we wanted to cancel requests automagically ✨ , we have our good old `fl
 
 # 🤔
 
-^ Problem with this approach is, you have to **think**. THINKING. IS. HARD. There’s a reason why most talks about testing in conferences have like 40 year old grizzled devs - it takes experience (and lots of it) to write testable code well.
+^ Problem with this approach is, you have to **think**. THINKING. IS. HARD. There’s a reason why most talks about testing in conferences have like super experienced grizzled old devs - it takes experience (and lots of it) to write testable code well. 
+
+^ Let's try an alternative using Rx
 
 ---
-
-# Subjects
-
-^ We’re using an Rx data structure called a subject. These act as both observers **and** observables. So, you can send events *TO* them, and all their subscribers receive their events. They’re like radios. Lots of people can broadcast on the same frequency, and anyone listening in, gets everything they’re saying. (Let's not talk about threading just yet, cos it makes things complicated). The best part about them is that you can use _only_ the observable bits using the `asObservable()` function
 
 ![inline](RxAvatar.png)
 
@@ -295,17 +311,69 @@ and if we wanted to cancel requests automagically ✨ , we have our good old `fl
 
 ![inline](avatars.gif)
 
-^ So now we get testability for free 🎉🎉🎉🎉🎉
+^ So now we get testability for free 🎉🎉🎉🎉🎉 without adding a new protocol type that we have to think about setting up separately
 
 ---
 
-## Networking(Again!)
+## Networking (Again!)
+
+---
+
+[.build-lists: true]
+
+# Things I want in my networking client
+
+1. Testability
+2. Should do exactly what it says. No 🐒 patching.
+
+^ There’s 2 things I really care about with my API Client. 
+^1. It should be testable
+^2. Should do exactly what it says. I’m dead against the idea of a client refreshing tokens and doing things “behind the scenes” by itself without telling the application. This is useful because your client can be used in contexts other than your app, in say a script or on the server!
 
 ---
 
 Average API Client (with Foundation)
 
 ![inline](avg-network-client.png)
+
+^ Testing this is incredibly easy, pass in a subclassed session object and override any of the dataTask methods in your tests
+
+---
+
+```swift
+func createBody(parameters: [String: String], boundary: String, file: AttachmentCreationModel?) -> Data {
+		let body = NSMutableData()
+		
+		let boundaryPrefix = "--\(boundary)\r\n"
+		
+		for (key, value) in parameters {
+			body.appendString(boundaryPrefix)
+			body.appendString("Content-Disposition: form-data; name=\"\(key)\"\r\n\r\n")
+			body.appendString("\(value)\r\n")
+		}
+		
+		body.appendString(boundaryPrefix)
+		
+		if let file = file {
+			body.appendString("Content-Disposition: form-data; name=\"files[\(index)]\"; filename=\"\(file.filename)\"\r\n")
+			body.appendString("Content-Type: \(file.mimeType)\r\n\r\n")
+			body.append(file.data)
+			body.appendString("\r\n")
+			body.appendString("--".appending(boundary.appending("--")))
+		}
+		
+		return body as Data
+	}
+```
+
+^One problem tho. Ever wrote multipart form upload in URLSession?
+
+---
+
+URLSession Features 😞👎
+URLSession Testability 💯
+
+^ Ever tried writing multipart form in URLSession? It's frustrating as hell. URLSession is designed as a really low level bare bones API. Which is why alternatives exist like....
 
 ---
 
@@ -315,35 +383,159 @@ Average API Client (with Alamofire)
 
 ---
 
-# Things I want in my networking client
-
-1. Testable
-2. Should do exactly what it says. No 🐒 patching.
-
-^ There’s 2 things I really care about with my API Client. 
-^1. It should be testable
-^2. Should do exactly what it says. I’m dead against the idea of a client refreshing tokens and doing things “behind the scenes” by itself without telling the application. This is useful because your client can be used in contexts other than your app, in say a script or on the server!
-
----
-
 ![inline](alamofire-retrial.png)
 
 ^ Alamofire has lots of features (which is why we all love it). For example, it has its own networking retrial implementation
 
 ---
 
+```swift
+class OAuth2Handler: RequestAdapter, RequestRetrier {
+    private typealias RefreshCompletion = (_ succeeded: Bool, _ accessToken: String?, _ refreshToken: String?) -> Void
+
+    private let sessionManager: SessionManager = {
+        let configuration = URLSessionConfiguration.default
+        configuration.httpAdditionalHeaders = SessionManager.defaultHTTPHeaders
+
+        return SessionManager(configuration: configuration)
+    }()
+
+    private let lock = NSLock()
+
+    private var clientID: String
+    private var baseURLString: String
+    private var accessToken: String
+    private var refreshToken: String
+
+    private var isRefreshing = false
+    private var requestsToRetry: [RequestRetryCompletion] = []
+
+    // MARK: - Initialization
+
+    public init(clientID: String, baseURLString: String, accessToken: String, refreshToken: String) {
+        self.clientID = clientID
+        self.baseURLString = baseURLString
+        self.accessToken = accessToken
+        self.refreshToken = refreshToken
+    }
+
+    // MARK: - RequestAdapter
+
+    func adapt(_ urlRequest: URLRequest) throws -> URLRequest {
+        if let urlString = urlRequest.url?.absoluteString, urlString.hasPrefix(baseURLString) {
+            var urlRequest = urlRequest
+            urlRequest.setValue("Bearer " + accessToken, forHTTPHeaderField: "Authorization")
+            return urlRequest
+        }
+
+        return urlRequest
+    }
+
+    // MARK: - RequestRetrier
+
+    func should(_ manager: SessionManager, retry request: Request, with error: Error, completion: @escaping RequestRetryCompletion) {
+        lock.lock() ; defer { lock.unlock() }
+
+        if let response = request.task?.response as? HTTPURLResponse, response.statusCode == 401 {
+            requestsToRetry.append(completion)
+
+            if !isRefreshing {
+                refreshTokens { [weak self] succeeded, accessToken, refreshToken in
+                    guard let strongSelf = self else { return }
+
+                    strongSelf.lock.lock() ; defer { strongSelf.lock.unlock() }
+
+                    if let accessToken = accessToken, let refreshToken = refreshToken {
+                        strongSelf.accessToken = accessToken
+                        strongSelf.refreshToken = refreshToken
+                    }
+
+                    strongSelf.requestsToRetry.forEach { $0(succeeded, 0.0) }
+                    strongSelf.requestsToRetry.removeAll()
+                }
+            }
+        } else {
+            completion(false, 0.0)
+        }
+    }
+
+    // MARK: - Private - Refresh Tokens
+
+    private func refreshTokens(completion: @escaping RefreshCompletion) {
+        guard !isRefreshing else { return }
+
+        isRefreshing = true
+
+        let urlString = "\(baseURLString)/oauth2/token"
+
+        let parameters: [String: Any] = [
+            "access_token": accessToken,
+            "refresh_token": refreshToken,
+            "client_id": clientID,
+            "grant_type": "refresh_token"
+        ]
+
+        sessionManager.request(urlString, method: .post, parameters: parameters, encoding: JSONEncoding.default)
+            .responseJSON { [weak self] response in
+                guard let strongSelf = self else { return }
+
+                if 
+                    let json = response.result.value as? [String: Any], 
+                    let accessToken = json["access_token"] as? String, 
+                    let refreshToken = json["refresh_token"] as? String 
+                {
+                    completion(true, accessToken, refreshToken)
+                } else {
+                    completion(false, nil, nil)
+                }
+
+                strongSelf.isRefreshing = false
+            }
+    }
+}
+let baseURLString = "https://some.domain-behind-oauth2.com"
+
+let oauthHandler = OAuth2Handler(
+    clientID: "12345678",
+    baseURLString: baseURLString,
+    accessToken: "abcd1234",
+    refreshToken: "ef56789a"
+)
+
+let sessionManager = SessionManager()
+sessionManager.adapter = oauthHandler
+sessionManager.retrier = oauthHandler
+
+let urlString = "\(baseURLString)/some/endpoint"
+
+sessionManager.request(urlString).validate().responseJSON { response in
+    debugPrint(response)
+}
+
+```
+
+---
+
 Alamofire Features 💯
 Alamofire Testability 😞👎
 
-^ Alamofire OTOH is _really_ hard to test (you have to resort to runtime trickery) and solves 2 using it’s own weird constructs around request adapters and request retriers, effectively moving your solution to a level in the stack below your API client, which is 😒
+^ Alamofire OTOH is _really_ hard to test (you have to resort to runtime trickery) and solves lots of problems around retrial using it’s own weird constructs around request adapters and request retriers, effectively moving your solution to a level in the stack below your API client, which is 😒 https://github.com/kylef/Mockingjay/blob/master/Sources/Mockingjay/MockingjayURLSessionConfiguration.m
 
 ---
 
 ![inline](Rx-retrial.png)
 
-^ What about Rx? Well, we can sort of get the best of both worlds (with the first example using NSURLSession). I’m probably running a little short of time here, but let’s go quickly over the operator. It’s called `retry` and has a couple of variations. The most important one is called `retryWhen`
+^ What about Rx? Well, we can sort of get the best of both worlds (with the first example using NSURLSession). I’m probably running a little short of time here, but let’s go quickly over the operator. It’s called `retry` - it resubscribes to the observable hoping a new error isn't returned) and has a couple of variations. The most important one is called `retryWhen` (This code snippet is from the raywenderlich RxSwift book btw. Amazing, totally recommend. Asked Marin Todorov for permission in the rx slack)
 
-^ this entire handler can handle invalid tokens (1 in the photo), bad connections(2) (and use reachability to ✨magically retry a request if the connection is bad) and ALSO retry requests otherwise with an exponential backoff 😎. All without being locked into alamofire.
+^ flatMapWithIndex - just adds an index
+
+^ this entire handler can handle invalid tokens (1 in the photo), bad connections(2) (and use reachability to ✨magically retry a request if the connection is bad) and ALSO retry requests every second 😎. All without being locked into alamofire.
+
+^ All you need to do is attach this at the end of your request observable
+
+---
+
+![inline](retry.png)
 
 ---
 
@@ -353,23 +545,25 @@ Alamofire Testability 😞👎
 
 ---
 
-But I don't wanna rewrite 😢
+But I don't wanna rewrite my code 😢
 
 ---
 
-![inline](rx-refactor.png)
+![inline](no-rewrite.png)
 
 ---
 
 ## What about Management 👩‍💼👨‍💼
 
+^Sooo.... Now you're gonna go back to work after this wonderful conference is over and ask your boss "Hey! Robin told me about this excellent RxSwift library and I wanna use it"
+
+^ They'll probably say: "Last time you suggested a major change (moving to swift), we spent weeks migrating code between versions. Yesterday you suggested writing server side swift. Why should I trust you?""
+
 ---
 
 # Make the case for it!!
 
-^ Last time we did a major change (moving to swift), you spent weeks migrating code between versions. Yesterday you suggested writing server side swift. Why should I trust you?
-
-^ Often when dealing with a new paradigm, you’ll get pushback from senior engineers. And while it’s really justified ( uses MVC, why go against the current? Didn’t you _just_ switch languages a year ago), I personally think it’s worth the future costs to use Rx in production apps right now. It remains a fact that  doesn’t exist in a vacuum, and looks at the community for inspiration. Who would’ve thought 4 years ago that they’d make a language with `map`, `reduce` and `filter` as first class citizens? IIRC Apple also has used ReactiveCocoa in one of their demo apps (it’s the thing that runs on macs in the demo mode). I genuinely believe that reactive programming has a bright future in the  ecosystem
+^ Often when dealing with a new paradigm, you’ll get pushback from senior engineers. And while it’s really justified ( uses MVC, why go against the current? Didn’t you _just_ switch languages 2 years ago), I personally think it’s worth the future costs to use Rx in production apps right now. It remains a fact that  doesn’t exist in a vacuum, and looks at the community for inspiration. Who would’ve thought 4 years ago that they’d make a language with `map`, `reduce` and `filter` as first class citizens? IIRC Apple also has used ReactiveCocoa in one of their demo apps (it’s the thing that runs on macs in the demo mode). I genuinely believe that reactive programming has a bright future in the  ecosystem
 
 ---
 
