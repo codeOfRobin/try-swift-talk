@@ -99,7 +99,7 @@ Rx ➡ streams of values over time.
 Sockets ➡ streams of data packets over time on a wire
 ➡ Rx ❤️ Sockets
 
-^ Thus, Rx translates really well for things like websockets, cos websockets are packets over a wire over time.  We’ve even written our own wrappers around existing websocket clients for our app, and things like disconnections, event subscriptions etc. are handled _really_ well. (link to repo)
+^ Thus, Rx translates really well for things like websockets, cos websockets are packets over a wire over time.  We’ve even written our own wrappers around existing websocket clients for our app, and things like network disconnections, event subscriptions etc. are handled _really_ well. (link to repo)
 
 
 ---
@@ -110,7 +110,7 @@ Sockets ➡ streams of data packets over time on a wire
 
 ^ You know, where you make a request and you get a response. And there’s just one response. Not very stream-ey, is it? Is Rx still useful for them?
 
-^ Here’s the thing. Requests don’t exist in isolation. Often they’re part of a bigger flow, like refreshing expired tokens, retrying with exponential backoff if you lose an internet connection. Which is why often you don’t deal with a single request by itself in your application flow. We’ll discuss this stuff in detail later, but I brought this up early because there’s this really cool function that has some interesting use cases in Rx. It’s called flatMapLatest
+^ Here’s the thing. Requests don’t exist in isolation. Often they’re part of a bigger flow, like refreshing expired OAuth tokens, retrying n attempts if your server is down with exponentially  increasing time, waiting for Reachability to tell you that there's a network connection. Which is why often you don’t deal with a single request by itself in your application flow. We’ll discuss this stuff in detail later, but I brought this up early because there’s this really cool function that has some interesting use cases in Rx. It’s called flatMapLatest
 
 ---
 
@@ -120,7 +120,7 @@ Sockets ➡ streams of data packets over time on a wire
 
 ![inline](filter.png)
 
-^ Functions like map, filter etc exist in Rx and they do exactly what you expect
+^ Functions like map, filter etc exist in Rx and they do exactly what you expect since observables behave like swift's sequence types
 
 ---
 
