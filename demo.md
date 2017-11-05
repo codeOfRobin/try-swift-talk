@@ -60,7 +60,7 @@
     setTimeout(() => observer.next(1), 1000)
     setTimeout(() => observer.next(2), 1500)
     setTimeout(() => observer.next(3), 2000)
-  }).flatMapLatest( n => {
+  }).switchMapLatest( n => {
   	return Rx.Observable.create(observer => {
         setTimeout(() => observer.next(n), 300)
   	  setTimeout(() => observer.next(n * 2), 600)
