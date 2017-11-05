@@ -85,7 +85,7 @@ So chill ❄
 
 # 2.0.0 🎉🎉🎉
 
-^ We started refactoring large parts of our app using RxSwift for our 2.0.0 release. We had lots of fun and interesting challenges, shipping actual features and value to customers all while writing testable maintainable code.
+^ We started refactoring large parts of our app using RxSwift for our 2.0.0 release. We had lots of fun and interesting challenges, shipping actual features and value to customers all while writing testable and maintainable code.
 
 ---
 
@@ -240,15 +240,15 @@ This gets untenable _very_ quickly
 
 ![inline](throttledSwitch.png)
 
-^ In contrast, the approach was delightfully simple. 
+^ In contrast, the approach was delightfully simple. We combined the 5 switches into a single signal, (ignore the asObservable for now, it's an implementation detail), debounce makes sure it fires only if nothing has changed for 3s so we're not hammering our server with requests, distinctUntilchanged makes sure state has actually changed. Then we subcribe to those changes, and we get an array of tuples in our closure, where we can fire off a request
 
 ---
 
-and if we wanted to cancel requests automagically ✨ , all we’d do was
+and if we wanted to cancel requests automagically ✨ , we have our good old `flatMapLatest`
 
 ![inline](throttledRequest.png)
 
-^ So, now so much weird mutable state is now just handled all well for free!
+^ So, now so much weird mutable state is now just handled all well for free! and we get a list of preferences for our UI
 
 ---
 
@@ -354,7 +354,7 @@ But I don't wanna rewrite 😢
 
 ---
 
-Make the case for it!!
+# Make the case for it!!
 
 ^ Last time we did a major change (moving to swift), you spent weeks migrating code between versions. Yesterday you suggested writing server side swift. Why should I trust you?
 
