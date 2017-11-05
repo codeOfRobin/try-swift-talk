@@ -207,7 +207,7 @@ let request: DataRequest
 
 ---
 
-Imagine if we added desktop preferences
+Imagine if we added desktop preferences (sizes exaggerated for visibility reasons 😉)
 
 ![inline](whatif.png)
 
