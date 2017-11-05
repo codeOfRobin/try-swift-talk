@@ -256,9 +256,20 @@ and if we wanted to cancel requests automagically ✨ , we have our good old `fl
 
 ---
 
+![](crusty.jpg)
+
+^ How many people here've watched the WWDC "crusty" talk by Dave Abrahammson?
+
+^(skip if enough people say yes) It's a session by Dave Abrahammson on the Swift Standard library team about protocol oriented programming. Really enjoyable, actually was repeated in 2016 as well. I highly recommend you watch this talk
+
+
+---
+
 ![inline](POP.png)
 
-^ Let's do POP like all good swift programmers who've seen Dave Abrahammson's WWDC talk. And in our actual code, we’d update from a network client. In our tests, we’d just broadcast events and test for the indicator appearing
+^ Explain the delegate approach
+
+^ Let's do POP like all good swift programmers. And in our actual code, we’d update from a network client. In our tests, we’d just broadcast events and test for the indicator appearing.
 
 ^ In fact, there's nothing wrong with this approach. It's perfect, uses swift's tools and is also testable.
 
