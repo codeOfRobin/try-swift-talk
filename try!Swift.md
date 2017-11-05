@@ -63,12 +63,6 @@ Experiences
 
 ---
 
-RxSwift is _**not**_ always the best way to solve a problem
-
-^ Remember, RxSwift is not always the best way to solve a problem, but you kinda have to know when to use it to its full potential. I will try to present you some examples that you can use in your application.
-
----
-
 I DON'T KNOW RxSwift 😰
 
 ^ Now, a lot of you might be going
@@ -365,6 +359,22 @@ Make the case for it!!
 ^ Last time we did a major change (moving to swift), you spent weeks migrating code between versions. Yesterday you suggested writing server side swift. Why should I trust you?
 
 ^ Often when dealing with a new paradigm, you’ll get pushback from senior engineers. And while it’s really justified ( uses MVC, why go against the current? Didn’t you _just_ switch languages a year ago), I personally think it’s worth the future costs to use Rx in production apps right now. It remains a fact that  doesn’t exist in a vacuum, and looks at the community for inspiration. Who would’ve thought 4 years ago that they’d make a language with `map`, `reduce` and `filter` as first class citizens? IIRC Apple also has used ReactiveCocoa in one of their demo apps (it’s the thing that runs on macs in the demo mode). I genuinely believe that reactive programming has a bright future in the  ecosystem
+
+---
+
+# Final words
+
+---
+
+RxSwift is _**not**_ always the best way to solve a problem
+
+^ Remember, RxSwift is not always the best way to solve a problem, but you kinda have to know when to use it to its full potential. We've gone over lots of examples where it's been excellent, but it doesn't stop you from shooting yourself in the foot. It doesn't solve all your threading woes for example. What it _does_ do is give a good set of primitives and a foundation to (move to next slide) 
+
+---
+
+# Build Great Apps 👏🎉🎊
+
+^And that's really what we want, don't we?
 
 ---
 
