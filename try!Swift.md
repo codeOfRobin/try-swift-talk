@@ -37,7 +37,7 @@ What this talk is _**NOT**_ about
 
 - Introduction to RxSwift
 
-<Tap Next>
+^ <Tap Next>
 
 ---
 
@@ -305,13 +305,65 @@ and if we wanted to cancel requests automagically ✨ , we have our good old fri
 
 ![inline](RxAvatar.png)
 
-^ For our tests, we can hook them up to an Observable we created ourselves. And for our app code, we can hook it up to our websocket connection
+^ For our tests, we can hook them up to an Observable we created ourselves. And for our app code, we can hook it up to our websocket connection. What's cool about this approach is that Rx helps us define a contract, and has good primitive types(like observables) to mock that contract
 
 ---
 
 ![inline](avatars.gif)
 
-^ So now we get testability for free 🎉🎉🎉🎉🎉 without adding a new protocol type that we have to think about setting up separately
+^ So now we get testability for free 🎉🎉🎉🎉🎉 without adding a new protocol type that would've otherwise been additional cognitive load
+
+---
+
+## Testability + Prototyping = 🤝
+
+^ And one advantage of making your code testable is that it also makes prototyping easier 🎉
+
+---
+
+![inline](presencebar.jpeg)
+
+^ We had this view we call the "Presence bar" and shows the avatars of the users looking at the same conversation as you in our app(and animates them in and out). Lots of layout code, lots of interactions and animations to test out. Now, logging in and out as 20 different users while we were testing stuff out would've been a royal pain.
+
+---
+
+![inline](PresenceBarInit.png)
+
+^ Instead, we initialize the view with an observable, and again, just like before, use our own observable while prototyping and swap out with one from our network in the actual app. Now, we needed an easy way to add and remove users from the view on demand, for prototyping.
+
+---
+
+![inline](PresenceBarApp.png)
+
+^ In order to do that, we abstracted away the view into it's own framework and put it inside it's own app. We added a UIStepper and now we need to wire them together. What's a good way to make an observable that can send arbitrary events?
+
+---
+
+
+# Subjects
+
+^ We’re using an Rx data structure called a subject. These act as both observers **and** observables. So, you can send events *TO* them, and all their subscribers receive their events. They’re like walkie talkies. Lots of people can broadcast on the same frequency, and anyone listening in, gets everything they’re saying.
+
+^ (Let's not talk about threading just yet, cos it makes things complicated) in case someone points out threading
+
+---
+
+![inline](subjectCode.png)
+
+^ The best part about them is that you can use _only_ the observable bits using the `asObservable()` function. So now... you can send arbitrary events to my view and prototype as I wish, not limited to a view or a delegate method or whatever
+
+---
+
+![inline autoplay](PresenceBarVid2.MP4)
+
+^ so now it was really easy for us to test out scenarios for adding and removing users(Notice the number counter thing)
+
+---
+
+![inline autoplay](PresenceBarVid1.MP4)
+
+^ and even things like landscape. Again, it's not that protocols are bad. Rx gives us a good set of primitives to work with and easily prototype + test code. It really makes this stuff effortless. Before, if a designer asked me their help prototyping something, I'd go crazy thinking about making MVPs, keeping code clean doing all this extra work. Now, it's just a flick of a switch ✨
+
 
 ---
 
@@ -513,6 +565,8 @@ sessionManager.request(urlString).validate().responseJSON { response in
 }
 
 ```
+
+^ Reallllly llooooooonnnng and boring code
 
 ---
 
