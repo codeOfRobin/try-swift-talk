@@ -113,7 +113,7 @@ Sockets ➡ streams of data packets over time on a wire
 
 ^ Let's talk about websockets first
 
-^ Thus, Rx translates really well for things like websockets, cos websockets are packets over a wire over time.  We’ve even written our own wrappers around existing websocket clients for our app, and things like network disconnections, event subscriptions etc. are handled _really_ well. (link to repo that we'll be open sourcing soon 😉)
+^ Thus, Rx translates really well for things like websockets, cos websockets are packets over a wire over time.  We’ve even written our own wrappers around existing websocket clients for our app, and things like network disconnections, event subscriptions(telling the server what events I want to listen to) etc. are handled _really_ well. (link to repo that we'll be open sourcing soon 😉)
 
 
 ---
@@ -317,7 +317,7 @@ and if we wanted to cancel requests automagically ✨ , we have our good old fri
 
 ## Testability + Prototyping = 🤝
 
-^ And one advantage of making your code testable is that it also makes prototyping easier 🎉
+^ While we're on the topic of testability, one advantage of making your code testable is that it also makes prototyping easier 🎉
 
 ---
 
@@ -362,7 +362,7 @@ and if we wanted to cancel requests automagically ✨ , we have our good old fri
 
 ![inline autoplay](PresenceBarVid1.MP4)
 
-^ and even things like landscape. Again, it's not that protocols are bad. Rx gives us a good set of primitives to work with and easily prototype + test code. It really makes this stuff effortless. Before, if a designer asked me their help prototyping something, I'd go crazy thinking about making MVPs, keeping code clean doing all this extra work. Now, it's just a flick of a switch ✨
+^ and even things like landscape. Again, it's not that protocols are bad or inefficient. It's just that Rx gives us a good set of primitives to work with and easily prototype + test code. It really makes this stuff effortless. Before, if a designer asked me for help with prototyping something, I'd go crazy thinking about making MVPs, keeping code clean doing all this extra work. Now, it's just a flick of a switch ✨
 
 
 ---
@@ -583,7 +583,7 @@ Alamofire Testability 😞👎
 
 ^ flatMapWithIndex - just adds an index
 
-^ this entire handler can handle invalid tokens (1 in the photo), bad connections(2) (and use reachability to ✨magically retry a request if the connection is bad) and ALSO retry requests every second 😎. All without being locked into alamofire.
+^ this entire handler can handle invalid tokens (1 in the photo), bad connections(2) (and use reachability to ✨magically retry a request if the connection is bad) and ALSO retry requests every second 😎. All without being locked into alamofire. Note that most apps don't even care about this stuff - like for a network failure most people just show an error alert and expect the user to do a pull to refresh or something. This elevates your app's user experience quite a bit!
 
 ^ All you need to do is attach this at the end of your request observable
 
@@ -627,7 +627,7 @@ But I don't wanna rewrite my code 😢
 
 RxSwift is _**not**_ always the best way to solve a problem
 
-^ Remember, RxSwift is not always the best way to solve a problem, but you kinda have to know when to use it to its full potential. We've gone over lots of examples where it's been excellent, but it doesn't stop you from shooting yourself in the foot. It doesn't solve all your threading woes for example. What it _does_ do is give a good set of primitives and a foundation to <move to next slide>
+^ Remember, RxSwift is not always the best way to solve a problem, but you kinda have to know when to use it to its full potential. We've gone over lots of examples where it's been excellent, but it doesn't stop you from shooting yourself in the foot. I hear a lot of people saying "Oh, with Rxswift you don't worry about threading" or "RxSwift makes your code fast".  What it _does_ do is give a good set of primitives and a foundation to <move to next slide>
 
 ---
 
