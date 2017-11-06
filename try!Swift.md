@@ -595,7 +595,7 @@ Alamofire Testability 😞👎
 
 ![inline](Networking.png)
 
-^ I’ve been personally experimenting with this library called Networking(which is a very thin convenience wrapper around `URLSession` and Rx.
+^ I’ve been personally experimenting with this library called Networking(which is a very thin convenience wrapper around `URLSession` and Rx. Will try OSSing some stuff soon
 
 ---
 
@@ -627,7 +627,7 @@ But I don't wanna rewrite my code 😢
 
 RxSwift is _**not**_ always the best way to solve a problem
 
-^ Remember, RxSwift is not always the best way to solve a problem, but you kinda have to know when to use it to its full potential. We've gone over lots of examples where it's been excellent, but it doesn't stop you from shooting yourself in the foot. It doesn't solve all your threading woes for example. What it _does_ do is give a good set of primitives and a foundation to (move to next slide) 
+^ Remember, RxSwift is not always the best way to solve a problem, but you kinda have to know when to use it to its full potential. We've gone over lots of examples where it's been excellent, but it doesn't stop you from shooting yourself in the foot. It doesn't solve all your threading woes for example. What it _does_ do is give a good set of primitives and a foundation to <move to next slide>
 
 ---
 
