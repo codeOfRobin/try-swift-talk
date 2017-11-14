@@ -151,7 +151,11 @@ Sockets ➡ streams of data packets over time on a wire
 
 ---
 
-![inline](FlatMapLatest.png)
+![inline](FlatMapLatest.png) 
+
+From the RxSwift book by the raywenderlich.com Tutorial Team [^1]
+
+[^1]: https://store.raywenderlich.com/products/rxswift
 
 ---
 
