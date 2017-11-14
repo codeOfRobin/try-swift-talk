@@ -82,10 +82,10 @@ I DON'T KNOW RxSwift 😰
 
 ---
 
->Conferences aren’t about learning things, they’re about learning *what* to learn, about networking, and meeting great people.
+>Conferences aren’t about learning things, they’re about learning "what" to learn, about networking, and about meeting great people.
 -- Someone on Twitter
 
-^ No one’s gonna turn into an FP talk after watching 15 slides of maps/flatmaps. No one’s gonna turn into Peter Norvig after a 20 minute ML talk. Sorry Mugunth
+^ No one’s gonna turn into an FP talk after watching 15 slides of maps/flatmaps. No one’s gonna turn into Peter Norvig after a 20 minute ML talk.
 
 ---
 
@@ -148,6 +148,10 @@ Sockets ➡ streams of data packets over time on a wire
 
 ^ https://rxfiddle.net/
 ^ Demo snippets in demo.md
+
+---
+
+![inline](FlatMapLatest.png)
 
 ---
 
