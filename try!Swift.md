@@ -19,6 +19,8 @@ slidenumbers: true
 ---
 [.build-lists: true]
 
+^So, let's do a show of hands first
+
 # Show of hands ✋
 
 1. How many people here’ve heard of Functional Reactive Programming?
@@ -37,25 +39,25 @@ What this talk is _**NOT**_ about
 
 - Introduction to RxSwift
 
-^ <Tap Next>
+^ It isn’t <TAP NEXT> an introduction to Rx, observables or reactive programming. It’s a complicated topic, you need to rewire your brain quite a bit to think of everything in terms of signals.
 
 ---
 
 - ~~Introduction to RxSwift~~
 
-^ It isn’t an introduction to Rx, observables or reactive programming. It’s a complicated topic, you need to rewire your brain quite a bit to think reactively.
+^ It isn’t an introduction to Rx, observables or reactive programming. It’s a complicated topic, you need to rewire your brain quite a bit to think of everything in terms of signals.
 
 ---
 
 ![inline](tweet.png)
 
-^ Trust me, I tried.
+^ Trust me, I tried. (This was at the swift India meetups in Delhi)
 
 ---
 
 -  RxSwift with MVVM
 
-^ <Tap Next>
+^ It isn't about Rxswift with MVVM either
 
 ---
 
@@ -69,12 +71,14 @@ Stories
 Examples
 Experiences
 
-^ What this talk **will** be, is a bunch of stories around how we refactored large parts of our app using Rx, and the stuff we found useful.
+^ What this talk **will** be, is a bunch of stories around how we refactored large parts of our app using Rx, and what parts we found useful
 
 ---
 
 
 ^ Now, a lot of you might be going. 
+
+^ I DON'T KNOW RxSwift 😰
 
 I DON'T KNOW RxSwift 😰
 
@@ -113,7 +117,11 @@ Sockets ➡ streams of data packets over time on a wire
 
 ^ Let's talk about websockets first
 
-^ Thus, Rx translates really well for things like websockets, cos websockets are packets over a wire over time.  We’ve even written our own wrappers around existing websocket clients for our app, and things like network disconnections, event subscriptions(telling the server what events I want to listen to) etc. are handled _really_ well. (link to repo that we'll be open sourcing soon 😉)
+^ Rx is all about streams of data/events over time (I'll be using the term events and values interchangeably)
+
+^ Sockets are streams of data packets over time on a wire
+
+^ Thus, Rx translates really well for things like websockets. We’ve even written our own wrappers around existing websocket clients for our app, and things like network disconnections, event subscriptions(telling the server what events I want to listen to) etc. are handled _really_ well. (we'll be open sourcing some related stuff soon, so stay tuned)
 
 
 ---
@@ -274,7 +282,7 @@ and if we wanted to cancel requests automagically ✨ , we have our good old fri
 
 ![inline](throttledRequest.png)
 
-^ So, now so much weird mutable state is now just handled all well for free! and we get a list of preferences in the `subscribe` callback that we can use in our UI!
+^ So, now so much weird mutable state that was all over your code is now just handled all well for free! and we get a list of preferences in the `subscribe` callback that we can use in our UI!
 
 ---
 
@@ -305,7 +313,7 @@ and if we wanted to cancel requests automagically ✨ , we have our good old fri
 
 # 🤔
 
-^ Problem with this approach is, you have to **think**. THINKING. IS. HARD. There’s a reason why most talks about testing in conferences have like super experienced grizzled old devs - it takes experience (and lots of it) to write testable code well. 
+^ Problem with this approach is, you have to **think**. THINKING. IS. HARD. There’s a reason why most talks about testing in conferences have like super experienced grizzled old devs - it takes experience (and lots of it) to write testable code well. The average junior engineer would probably, given this problem pass in the socket client directly, or worse use a singleton to update the view(that takes away most testability in your code)
 
 ^ Let's try an alternative using Rx
 
@@ -331,13 +339,13 @@ and if we wanted to cancel requests automagically ✨ , we have our good old fri
 
 ![inline](presencebar.jpeg)
 
-^ We had this view we call the "Presence bar" and shows the avatars of the users looking at the same conversation as you in our app(and animates them in and out). Lots of layout code, lots of interactions and animations to test out. Now, logging in and out as 20 different users while we were testing stuff out would've been a royal pain.
+^ We had this view we call the "Presence bar" and shows the avatars of the users looking at the same conversation as you in our app(and animates them in and out). Lots of layout code, lots of interactions and animations to test out as more and more users were online. Now, logging in and out as 20 different users while we were testing stuff out would've been a royal pain.
 
 ---
 
 ![inline](PresenceBarInit.png)
 
-^ Instead, we initialize the view with an observable, and again, just like before, use our own observable while prototyping and swap out with one from our network in the actual app. Now, we needed an easy way to add and remove users from the view on demand, for prototyping.
+^ Instead, we initialize the view with an observable, and again, just like before, use our own observable while prototyping and swap out with one from our network in the actual app. Now, we needed an easy way to add and remove users from the view on demand, so our designers could prototype.
 
 ---
 
@@ -358,7 +366,7 @@ and if we wanted to cancel requests automagically ✨ , we have our good old fri
 
 ![inline](subjectCode.png)
 
-^ The best part about them is that you can use _only_ the observable bits using the `asObservable()` function. So now... you can send arbitrary events to my view and prototype as I wish, not limited to a view or a delegate method or whatever
+^ The best part about them is that you can use _only_ the observable bits using the `asObservable()` function. So now... you can send arbitrary events to my view from the stepper delegate and prototype as I wish, not limited to a view or a delegate method or whatever
 
 ---
 
@@ -433,7 +441,7 @@ func createBody(parameters: [String: String], boundary: String, file: Attachment
 URLSession Features 😞👎
 URLSession Testability 💯
 
-^ Ever tried writing multipart form in URLSession? It's frustrating as hell. URLSession is designed as a really low level bare bones API. Which is why alternatives exist like....
+^ URLSession is designed as a really low level bare bones API. Which is why alternatives exist like....
 
 ---
 
@@ -581,7 +589,7 @@ sessionManager.request(urlString).validate().responseJSON { response in
 Alamofire Features 💯
 Alamofire Testability 😞👎
 
-^ Alamofire OTOH is _really_ hard to test (you have to resort to runtime trickery) and solves lots of problems around retrial using it’s own weird constructs around request adapters and request retriers, effectively moving your solution to a level in the stack below your API client, which is 😒 https://github.com/kylef/Mockingjay/blob/master/Sources/Mockingjay/MockingjayURLSessionConfiguration.m
+^ Alamofire OTOH is _really_ hard to test cos most of the time people use the Alamofire singleton and the underlying session behaviour is really hidden (Most people I know resort to runtime trickery) and solves lots of problems around retrial using it’s own weird constructs around request adapters and request retriers, effectively moving your solution to a level in the stack below your API client, which is 😒 https://github.com/kylef/Mockingjay/blob/master/Sources/Mockingjay/MockingjayURLSessionConfiguration.m
 
 ---
 
@@ -589,7 +597,7 @@ Alamofire Testability 😞👎
 
 ^ What about Rx? Well, we can sort of get the best of both worlds (with the first example using NSURLSession). I’m probably running a little short of time here, but let’s go quickly over the operator. It’s called `retry` - it resubscribes to the observable hoping a new error isn't returned) and has a couple of variations. The most important one is called `retryWhen` (This code snippet is from the raywenderlich RxSwift book btw. Amazing, totally recommend. Asked Marin Todorov for permission in the rx slack)
 
-^ flatMapWithIndex - just adds an index
+^ What this does is, it has a closure that returns an observable. And will retry whenever that observable fires
 
 ^ this entire handler can handle invalid tokens (1 in the photo), bad connections(2) (and use reachability to ✨magically retry a request if the connection is bad) and ALSO retry requests every second 😎. All without being locked into alamofire. Note that most apps don't even care about this stuff - like for a network failure most people just show an error alert and expect the user to do a pull to refresh or something. This elevates your app's user experience quite a bit!
 
@@ -646,3 +654,11 @@ RxSwift is _**not**_ always the best way to solve a problem
 ---
 
 ![autoplay loop](peanuts.mp4)
+
+---
+
+# Doubts? questions? Wanna talk to me?
+
+I'm @codeOfRobin most places, or me@rmalhotra.com 
+
+---
