@@ -1,3 +1,5 @@
+We're going to do some mental gynastics here, and it's value won't be immediately visible, but bear with me :)
+
 1. let’s start by firing 1,2,3 successively every few seconds
   ```
    Rx.Observable.create(observer => {

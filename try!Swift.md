@@ -8,15 +8,10 @@ slidenumbers: true
 
 # Prelude
 
-^ Hello Everyone! It’s an honour and pleasure to speak here. Round of applause for the  speakers and organizers. Great job everyone. <Press next NOW>
+^ Hello Everyone! It’s an honour and pleasure to speak here. Great job everyone, especially speakers and organizers.
 
 ---
 
-# 👏👏👏
-
-^ <clap with everyone>
-
----
 [.build-lists: true]
 
 ^So, let's do a show of hands first
@@ -24,8 +19,8 @@ slidenumbers: true
 # Show of hands ✋
 
 1. How many people here’ve heard of Functional Reactive Programming?
-2. How many people here’ve heard of Reactive Swift/RxSwift?
-3. How many people here’ve used Reactive Swift/RxSwift?
+2. How many people here’ve heard of ReactiveSwift/RxSwift?
+3. How many people here’ve used ReactiveSwift/RxSwift?
 
 ^ Don’t forget to announce the percentages for video reasons
 
@@ -51,7 +46,7 @@ What this talk is _**NOT**_ about
 
 ![inline](tweet.png)
 
-^ Trust me, I tried. (This was at the swift India meetups in Delhi)
+^ Trust me, I tried explaining it in 20 minutes. Did not work out as well as I hoped (This was at the swift India meetups in Delhi)
 
 ---
 
@@ -71,7 +66,7 @@ Stories
 Examples
 Experiences
 
-^ What this talk **will** be, is a bunch of stories around how we refactored large parts of our app using Rx, and what parts we found useful
+^ What this talk **will** be, is a bunch of stories, examples and experiences around how we refactored large parts of our app using Rx, and what parts we found useful
 
 ---
 
@@ -89,7 +84,7 @@ I DON'T KNOW RxSwift 😰
 >Conferences aren’t about learning things, they’re about learning "what" to learn, about networking, and about meeting great people.
 -- Someone on Twitter
 
-^ No one’s gonna turn into an FP talk after watching 15 slides of maps/flatmaps. No one’s gonna turn into Peter Norvig after a 20 minute ML talk.
+^ No one’s gonna turn into an FP expert after watching 15 slides of maps/flatmaps. No one’s gonna turn into Peter Norvig after a 20 minute ML talk.
 
 ---
 
@@ -99,7 +94,7 @@ So chill ❄
 
 ---
 
-# 2.0.0 🎉🎉🎉
+## 2.0.0 🎉🎉🎉
 
 ^ We started refactoring large parts of our app using RxSwift for our 2.0.0 release. We had lots of fun and interesting challenges, shipping actual features and value to customers all while writing testable and maintainable code.
 
@@ -136,7 +131,7 @@ Sockets ➡ streams of data packets over time on a wire
 
 ---
 
-## `flatMapLatest()`
+### `flatMapLatest()`
 
 ---
 
@@ -195,7 +190,7 @@ From the RxSwift book by the raywenderlich.com Tutorial Team [^1]
 
 ---
 
-## First idea: a request queue 🤔
+## First idea: a request queue 🧐
 
 ---
 
@@ -238,6 +233,7 @@ let request: DataRequest
 	// wait for that callback to complete
 }
 ```
+^You also need to do the state comparison  + cancel old request if any
 
 ---
 
@@ -282,7 +278,7 @@ and if we wanted to cancel requests automagically ✨ , we have our good old fri
 
 ![inline](throttledRequest.png)
 
-^ So, now so much weird mutable state that was all over your code is now just handled all well for free! and we get a list of preferences in the `subscribe` callback that we can use in our UI!
+^ So, now so much weird mutable statec comparisons + timers + request cancelling code that was all over your file is now just handled all in a single place for free! and we get a list of preferences in the `subscribe` callback that we can use in our UI!
 
 ---
 
@@ -351,7 +347,7 @@ and if we wanted to cancel requests automagically ✨ , we have our good old fri
 
 ![inline](PresenceBarApp.png)
 
-^ In order to do that, we abstracted away the view into it's own framework and put it inside it's own app. We added a UIStepper and now we need to wire them together. What's a good way to make an observable that can send arbitrary events?
+^ In order to do that, we abstracted away the view into it's own framework and put it inside it's own app. We added a UIStepper and now we need to wire them together. We could use RxSwift's bind to connect them together directly, but sometimes we just want to send arbitrary events, from say a timer or a dispatch source, or RxCocoa sometimes won't have it implemented.  What's a good way to make an observable that can send arbitrary events?
 
 ---
 
@@ -363,6 +359,22 @@ and if we wanted to cancel requests automagically ✨ , we have our good old fri
 ^ (Let's not talk about threading just yet, cos it makes things complicated) in case someone points out threading
 
 ---
+
+```
+let subject = PublishSubject<Something>
+// callback of whatever UI event, timer, whatever arbitrary thing etc
+{
+    subject.onNext(something)
+}
+
+subject.subscribe(onNext: {
+    // get something!
+})
+
+```
+
+---
+
 
 ![inline](subjectCode.png)
 
@@ -595,13 +607,13 @@ Alamofire Testability 😞👎
 
 ![inline](Rx-retrial.png)
 
+^This is my favorite bit of code in the whole RxSwift book
+
 ^ What about Rx? Well, we can sort of get the best of both worlds (with the first example using NSURLSession). I’m probably running a little short of time here, but let’s go quickly over the operator. It’s called `retry` - it resubscribes to the observable hoping a new error isn't returned) and has a couple of variations. The most important one is called `retryWhen` (This code snippet is from the raywenderlich RxSwift book btw. Amazing, totally recommend. Asked Marin Todorov for permission in the rx slack)
 
-^ What this does is, it has a closure that returns an observable. And will retry whenever that observable fires
+^ What this does is, it has a closure that returns an observable. And will retry whenever that observable fires. So depending on the error, if you have an expired token(that's example 1), you can make a request for a new token. If you have a bad connection (example 2), you can use Reachability to notify you when the internet is back. If you have a server error(that's example 3), you can setup a timer that fires once after a few seconds to ask your server, all automagically with these few lines of code. You can probably also do something coooler like an exponential backoff - make a request after 2s, then 4s then 8s etc
 
-^ this entire handler can handle invalid tokens (1 in the photo), bad connections(2) (and use reachability to ✨magically retry a request if the connection is bad) and ALSO retry requests every second 😎. All without being locked into alamofire. Note that most apps don't even care about this stuff - like for a network failure most people just show an error alert and expect the user to do a pull to refresh or something. This elevates your app's user experience quite a bit!
-
-^ All you need to do is attach this at the end of your request observable
+^  Note that most apps don't even care about this stuff - like for a network failure most people just show an error alert and expect the user to do a pull to refresh or something (and sometimes, they do something even worse which is restart ALL requests). This elevates your app's user experience quite a bit! 
 
 ---
 
