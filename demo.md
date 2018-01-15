@@ -30,6 +30,7 @@ We're going to do some mental gynastics here, and it's value won't be immediatel
   ```
 
 4. Now let's make things complicated by adding more events
+```
  Rx.Observable.create(observer => {
     setTimeout(() => observer.next(1), 2000)
     setTimeout(() => observer.next(2), 4000)
@@ -41,6 +42,7 @@ We're going to do some mental gynastics here, and it's value won't be immediatel
       setTimeout(() => observer.next(n * 3), 1500)      
       })
   })
+```
 
 4. now let’s flatmap
   ```
@@ -58,7 +60,7 @@ We're going to do some mental gynastics here, and it's value won't be immediatel
   ```
 
 5. Okay so flatmap was cool. What about flatmapLatest?. Let's go back to the map for a second
-
+```
   Rx.Observable.create(observer => {
     setTimeout(() => observer.next(1), 2000)
     setTimeout(() => observer.next(2), 4000)
@@ -70,6 +72,7 @@ We're going to do some mental gynastics here, and it's value won't be immediatel
       setTimeout(() => observer.next(n * 3), 1500)      
       })
   })
+```
 
   What flatmaplatest does, is, whichever observable is returned last, it only listens to events from that and discards any previous obsrvables. 
 
@@ -101,7 +104,7 @@ We're going to do some mental gynastics here, and it's value won't be immediatel
       })
   })
   ```
-
+```
 Did everyone get this?
 
 Now, why is this important? This was really cool menal gymnastics but why is this important?
