@@ -91,7 +91,8 @@ We're going to do some mental gynastics here, and it's value won't be immediatel
   })
   ```
 
-8.```
+8. Now, let's flatmap
+```
      Rx.Observable.create(observer => {
     setTimeout(() => observer.next(1), 2000)
     setTimeout(() => observer.next(2), 3000)
@@ -104,7 +105,6 @@ We're going to do some mental gynastics here, and it's value won't be immediatel
       })
   })
   ```
-```
 Did everyone get this?
 
 Now, why is this important? This was really cool menal gymnastics but why is this important?
